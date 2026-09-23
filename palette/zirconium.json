@@ -1,0 +1,26 @@
+{
+  "name": "Zirconium",
+  "source": "Adapted from supplied Zig Docs xterm-256 reference; not an official Zig palette",
+  "dark": {
+    "surface": { "bg": "#161616", "panel": "#242424", "elevated": "#303030", "muted": "#1d1d1d", "border": "#444444", "selection": "#3a414d" },
+    "text": { "primary": "#d9d9d3", "muted": "#b2b2a1", "subtle": "#92928b", "inverse": "#161616" },
+    "syntax": { "keyword": "#eeeeee", "string": "#7ce89a", "builtin": "#ff9b79", "comment": "#b0ae8a", "function": "#bebaff", "literal": "#ff9996", "number": "#ff9996", "type": "#8ca8ff", "operator": "#c7c7bc", "variable": "#d9d9d3" },
+    "diagnostic": { "error": "#ff9996", "warn": "#e5bd71", "info": "#8ca8ff", "hint": "#9accc5", "success": "#7ce89a" },
+    "ui": { "accent": "#dca65b", "search": "#665024", "cursor": "#dca65b", "selectionFg": "#eeeeee", "controlBorder": "#777777" },
+    "ansi": {
+      "normal": ["#222222", "#ff9996", "#7ce89a", "#e5bd71", "#8ca8ff", "#bebaff", "#9accc5", "#d9d9d3"],
+      "bright": ["#77776d", "#ffb2ae", "#a7ffc1", "#ffdaa1", "#b7c9ff", "#d3d0ff", "#c7f2e9", "#faf9f4"]
+    }
+  },
+  "light": {
+    "surface": { "bg": "#f9f8f4", "panel": "#ffffff", "elevated": "#f0eee9", "muted": "#f3f1ec", "border": "#d8d4cd", "selection": "#e8ded4" },
+    "text": { "primary": "#303030", "muted": "#595959", "subtle": "#686868", "inverse": "#ffffff" },
+    "syntax": { "keyword": "#333333", "string": "#a8004e", "builtin": "#005f7d", "comment": "#595958", "function": "#890b12", "literal": "#00635e", "number": "#00635e", "type": "#555887", "operator": "#686868", "variable": "#303030" },
+    "diagnostic": { "error": "#a32130", "warn": "#845900", "info": "#005f7d", "hint": "#586183", "success": "#17683d" },
+    "ui": { "accent": "#8c510b", "search": "#f1d69b", "cursor": "#8c510b", "selectionFg": "#262626", "controlBorder": "#888078" },
+    "ansi": {
+      "normal": ["#32302e", "#a32130", "#17683d", "#845900", "#3656a0", "#92518a", "#00635e", "#d6d3cc"],
+      "bright": ["#66635e", "#bd3343", "#267a50", "#9b710b", "#4f70bc", "#a867a0", "#167e76", "#ffffff"]
+    }
+  }
+}

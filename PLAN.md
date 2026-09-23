@@ -1,0 +1,41 @@
+# Zirconium — cross-app theme and showcase plan
+
+## Context
+- The project began as a Neovim colorscheme template named `my-theme`; the deliverable is a Linux/ricing-oriented cross-app theme and Svelte showcase.
+- Supplied Zig Docs xterm-256 JSON and HTML preview include light/dark syntax colors, surfaces, and terminal examples. The JSON explicitly notes approximate mapping and incomplete verification against live Zig docs; treat it as an inspiration/reference, not a verified upstream canonical palette. It covers indices 16–255, **not ANSI 0–15**; light ordinary foreground is inherited in the source. The adapted theme must supply these missing roles.
+- The theme documentation describes Neovim plugin-manager installation, terminal imports from a cloned repository, direnv/Nix development and safe local smoke tests.
+
+## Approach
+- **Identity and palette:** brand as **Zirconium**, with an editorial/industrial Linux-workstation identity (precision, legibility, quiet structure; a restrained warm-metal accent). Adapt—not duplicate—the xterm-mapped reference: dark graphite/green strings/coral builtins/lavender functions/blue types; light paper/magenta strings/petrol builtins/warm red functions. Put both variants' semantic surface, syntax, UI, and complete ANSI 0–15 roles in `palette/zirconium.json`. Explicitly document which hues were inspired by the reference and which were designed for missing roles. Target 4.5:1 for reading text/syntax and 3:1 for meaningful UI boundaries; test on their actual surfaces.
+- **Single source of truth:** a dependency-free Node exporter `scripts/generate.mjs` reads that JSON and generates the Lua palette, six terminal files, and an importable site token file; `--check` compares committed exports to source without writing. Add a palette/contrast parity test; truecolor is the primary experience, with xterm-256 indices computed for Neovim cterm fallback. Avoid hard-coded alternate colors across outputs.
+- **Neovim:** refactor the existing template under `lua/zirconium/`, expose `:colorscheme zirconium`, `zirconium-dark`, and `zirconium-light`, plus `require('zirconium').setup({ transparent, italics, overrides })`; default follows `vim.o.background`, explicit names force a variant. Refresh palette and integrations at application time, preserve transparent backgrounds without leaking `NONE` to contrast/ANSI calculations, fix invalid/obsolete Treesitter names, broken search/JSON/lualine colors, and map Zig tokens to reference-inspired roles; keep cmp, bufferline, lualine integrations.
+- **Terminals:** provide drop-in light/dark config files for Alacritty (TOML), foot (INI), kitty (conf), including foreground/background/cursor/selection and ANSI 0–15, with exact import/install examples and a note that changing terminal variant is terminal-specific. Do not claim Zig's indices 16–255 define ANSI colors.
+- **Website and assets:** ship a static Svelte/Vite microsite in `site/` (no hosting adapter): high-impact brand hero with original SVG mark, editor/terminal preview, variant toggle, token explorer, design-philosophy section, cross-app preview and copyable install snippets; responsive, reduced-motion, keyboard/screen-reader friendly. Supply reusable SVG mark, README hero/social card, and palette poster in `assets/`; no Zig trademark/logo reuse or unverifiable affiliation. Site swatches and preview styles consume generated tokens.
+- **Documentation and release:** use the approved public repository `https://github.com/T-450/zirconium` for Neovim plugin-manager installation and clone-based terminal imports; build the site in GitHub Actions for GitHub Pages' `/zirconium/` project path. Preserve tooling, provenance and xterm limits, and keep smoke tests offline even though the demo may fetch plugins.
+
+## Original implementation scope
+- Rename/refactor `lua/my-theme/**` → `lua/zirconium/**`, `colors/my-theme*.lua` → `colors/zirconium*.lua`, `lua/lualine/themes/my-theme.lua` → `lua/lualine/themes/zirconium.lua`; retain/fix `after/queries/**` if necessary. Remove template-named entrypoints once public API is documented.
+- Add `palette/zirconium.json`, `scripts/generate.mjs`, `scripts/check-palette.mjs`, `terminal/{alacritty,foot,kitty}/{zirconium-dark,zirconium-light}.*`, generated `lua/zirconium/palette.lua` and `site/src/lib/palette.json`.
+- Add `site/package.json`, lockfile, `site/index.html`, `site/vite.config.*`, `site/src/**`, `site/public/**` (static Svelte/Vite app); `assets/zirconium-{mark,hero,social,palette}.svg` (or equivalent consistent names).
+- Update `README.md`, `THEME_README.md`, `DEVELOPMENT_GUIDE.md`, `init.lua`, `.envrc`, `flake.nix`, `.gitignore` for release docs and reproducible tooling. Avoid modifying supplied Downloads files.
+
+## Starting point
+- Original Neovim template: `lua/my-theme/**`, `colors/my-theme*.lua` and `lua/lualine/themes/my-theme.lua`; the port lives under `lua/zirconium/`, `colors/zirconium*.lua` and `lua/lualine/themes/zirconium.lua`. The plugin-heavy `init.lua` may auto-clone lazy.nvim, so smoke tests use `nvim -u NONE` with an explicit runtimepath. Node/npm, nvim and foot are available locally; stylua/Nix, Alacritty and kitty CLIs were absent at the last check.
+- Source reference: separately supplied `zig-docs-xterm256.json` and `zig-docs-xterm256-preview.html` (read-only, not included in the repository).
+
+## Steps
+- [x] Confirm brand name, adapted reference fidelity, static site scope, and host-agnostic delivery.
+- [x] Audit existing Neovim highlights, build setup, palette coverage, and available verification tools (Neovim 0.12.5, Node 24/npm 11, foot installed; stylua/nix, alacritty, kitty not on PATH).
+- [x] Define dark/light semantic tokens and full ANSI ramps, record reference-to-final mapping and contrast results; implement exporter plus reproducible `--check`.
+- [x] Port and repair Neovim theme/entrypoints/integrations, ensure real-time variant switching, truecolor/cterm behavior, transparency, overrides, Zig + standard Tree-sitter/LSP groups.
+- [x] Export Alacritty/foot/kitty configs, confirm format/key semantics, and document variant imports.
+- [x] Design/build static Svelte microsite and matching marketing SVGs with interactive previews and install snippets.
+- [x] Rewrite project/design/dev documentation and demo configuration with the approved repository path, clone-based terminal usage, palette limits and offline smoke guidance.
+- [x] Run export/contrast/site build/Neovim/terminal checks and responsive/accessibility review; fix identified local discrepancies.
+- [ ] Publish the public GitHub repository, enable Pages' GitHub Actions source, confirm the deployment workflow and inspect the live `/zirconium/` site and repository links.
+
+## Verification
+- `node scripts/generate.mjs --check` and `node scripts/check-palette.mjs`: committed Lua/terminal/site exports match tokens, valid hex/ANSI keys, contrast thresholds reported and explained; inspect all six terminal configs for syntax/import consistency. Validate with `foot` locally where possible; alacritty/kitty aren't installed, so use format checks and document that runtime validation remains outstanding.
+- `nvim --headless -u NONE --cmd 'set rtp+=.' ...` (never boot existing auto-installing `init.lua`): load all three entrypoints, switch dark↔light, verify representative Zig syntax/core/Tree-sitter/LSP highlights, 16 terminal slots, transparency, overrides, and non-truecolor fallback; check no invalid highlight attributes or undefined color tokens.
+- **Local results:** exporter and reading contrast checks pass (minimum 4.96:1 dark, 5.24:1 light); `ui.controlBorder` checks at least 3:1 on page, panel and muted surfaces. The Svelte production build and `/zirconium/` prefix smoke (`npm run test:prefix --prefix site`) pass, as does `tests/nvim-smoke.lua` on the available Neovim runtime. Lua syntax, both foot `-C` configs, Alacritty TOML parsing and SVG XML checks have passed. Local Chrome checks covered variant toggles, small-screen navigation, clipboard-denied selection and prefix assets; they do not prove a live deployment.
+- **Environment limits:** Alacritty and kitty CLIs are not installed, so their runtime imports remain unverified; `stylua`/Nix are absent. GitHub Actions and the public Pages URL must be verified after the repository is published.
