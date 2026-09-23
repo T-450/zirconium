@@ -1,7 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
-  <title id="title">Zirconium monogram</title>
-  <rect width="64" height="64" rx="15" fill="#161616"/>
-  <path d="M14 16h36v6L23 42h27v6H14v-6l27-20H14z" fill="#d9d9d3"/>
-  <path d="M43 14h9v9h-9z" fill="#dca65b"/>
-  <path d="M12 42h10v10H12z" fill="#7ce89a"/>
+  <title id="title">Zirconium: element 40</title>
+  <rect x="1" y="1" width="62" height="62" fill="#161616" stroke="#dca65b" stroke-width="2"/>
+  <text x="8" y="16" fill="#dca65b" font-family="monospace" font-size="11">40</text>
+  <text x="8" y="48" fill="#f9f8f4" font-family="monospace" font-size="30" font-weight="bold" letter-spacing="-3">Zr</text>
 </svg>

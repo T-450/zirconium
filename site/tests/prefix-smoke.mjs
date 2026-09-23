@@ -31,12 +31,11 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 try {
   const base = `http://127.0.0.1:${server.address().port}${prefix}`;
   const html = await (await fetch(base)).text();
-  const socialImage = html.match(/<meta property="og:image" content="([^"]+)"/)?.[1];
-  assert.equal(socialImage, 'https://t-450.github.io/zirconium/zirconium-social.svg');
+  assert(html.includes('<title>Zirconium · Color palette</title>'));
+  assert(!html.includes('og:image'), 'deleted promotional image must not be referenced');
   const assets = [...html.matchAll(/(?:src|href)="([^" ]+\.(?:js|css|svg))"/g)].map(match => match[1]);
   assert(assets.some(path => path.endsWith('.js')) && assets.some(path => path.endsWith('.css')));
   assert(assets.some(path => path.endsWith('zirconium-mark.svg')));
-  assets.push('zirconium-social.svg');
   for (const asset of assets) {
     const url = new URL(asset, base);
     assert(url.pathname.startsWith(prefix), `${asset} escapes ${prefix}`);
@@ -45,16 +44,11 @@ try {
     if (asset.endsWith('.css')) {
       const css = await result.text();
       const fonts = [...css.matchAll(/url\(["']?([^"')]+\.woff2)["']?\)/g)].map(match => match[1]);
-      assert.equal(fonts.length, 2);
-      for (const font of fonts) {
-        const fontUrl = new URL(font, url);
-        assert(fontUrl.pathname.startsWith(prefix), `${font} escapes ${prefix}`);
-        assert.equal((await fetch(fontUrl)).status, 200, `${font} failed under ${prefix}`);
-      }
+      assert.equal(fonts.length, 0, 'removed font assets must not be referenced');
     }
   }
   assert.deepEqual(outsideRequests, []);
-  console.log('Prefix smoke: HTML, JS, CSS, icon, social image, both fonts served under /zirconium/');
+  console.log('Prefix smoke: palette HTML, JS, CSS and element icon served under /zirconium/');
 } finally {
   server.close();
 }
