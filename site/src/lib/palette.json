@@ -19,7 +19,7 @@
     "syntax": {
       "keyword": "#eeeeee",
       "string": "#7ce89a",
-      "builtin": "#ff9b79",
+      "builtin": "#ff8059",
       "comment": "#b0ae8a",
       "function": "#bebaff",
       "literal": "#ff9996",
@@ -30,7 +30,7 @@
     },
     "diagnostic": {
       "error": "#ff9996",
-      "warn": "#e5bd71",
+      "warn": "#f0b44c",
       "info": "#8ca8ff",
       "hint": "#9accc5",
       "success": "#7ce89a"
@@ -47,7 +47,7 @@
         "#222222",
         "#ff9996",
         "#7ce89a",
-        "#e5bd71",
+        "#f0b44c",
         "#8ca8ff",
         "#bebaff",
         "#9accc5",
@@ -57,7 +57,7 @@
         "#77776d",
         "#ffb2ae",
         "#a7ffc1",
-        "#ffdaa1",
+        "#ffcf8a",
         "#b7c9ff",
         "#d3d0ff",
         "#c7f2e9",
