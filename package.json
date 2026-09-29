@@ -1,0 +1,25 @@
+{
+  "name": "zirconium-themes",
+  "private": true,
+  "type": "module",
+  "description": "Zirconium dark and light themes for Pi",
+  "keywords": ["pi-package"],
+  "scripts": {
+    "test": "node --test tests/pi-*.mjs",
+    "check": "tsc --noEmit"
+  },
+  "pi": {
+    "themes": ["./pi/themes/*.json"],
+    "extensions": ["./pi/extensions/zirconium-ui.ts"]
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "0.87.1",
+    "@earendil-works/pi-tui": "0.87.1",
+    "@types/node": "^26.0.0",
+    "typescript": "^6.0.0"
+  }
+}

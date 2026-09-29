@@ -1,4 +1,4 @@
 .direnv
 lazy-lock.json
-site/node_modules/
+node_modules/
 site/dist/

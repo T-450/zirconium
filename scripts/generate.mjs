@@ -56,6 +56,77 @@ function kitty(p) {
     [`foreground ${p.text.primary}`, `background ${p.surface.bg}`, `cursor ${p.ui.cursor}`, `cursor_text_color ${p.text.inverse}`, `selection_foreground ${p.ui.selectionFg}`, `selection_background ${p.surface.selection}`,
       ...[...p.ansi.normal, ...p.ansi.bright].map((c, i) => `color${i} ${c}`)].join('\n') + '\n';
 }
+function mix(a, b, weight) {
+  return '#' + [1, 3, 5].map(i => Math.round(
+    parseInt(a.slice(i, i + 2), 16) * (1 - weight) + parseInt(b.slice(i, i + 2), 16) * weight,
+  ).toString(16).padStart(2, '0')).join('');
+}
+function piTheme(p, variant) {
+  const { surface: s, text: t, syntax: x, diagnostic: d, ui } = p;
+  return JSON.stringify({
+    $schema: 'https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/src/modes/interactive/theme/theme-schema.json',
+    name: `zirconium-${variant}`,
+    colors: {
+      accent: ui.accent,
+      border: ui.controlBorder,
+      borderAccent: ui.accent,
+      borderMuted: s.border,
+      success: d.success,
+      error: d.error,
+      warning: d.warn,
+      muted: t.muted,
+      dim: t.subtle,
+      text: t.primary,
+      thinkingText: t.muted,
+      selectedBg: mix(s.bg, ui.accent, 0.08),
+      scrollbarTrack: s.border,
+      scrollbarThumb: ui.controlBorder,
+      searchMatchBg: ui.search,
+      searchMatchText: ui.selectionFg,
+      userMessageBg: s.panel,
+      userMessageText: t.primary,
+      customMessageBg: s.muted,
+      customMessageText: t.primary,
+      customMessageLabel: ui.accent,
+      toolPendingBg: s.muted,
+      toolSuccessBg: mix(s.muted, d.success, 0.03),
+      toolErrorBg: mix(s.muted, d.error, 0.04),
+      toolTitle: x.keyword,
+      toolOutput: t.primary,
+      mdHeading: x.keyword,
+      mdLink: d.info,
+      mdLinkUrl: t.subtle,
+      mdCode: x.builtin,
+      mdCodeBlock: t.primary,
+      mdCodeBlockBorder: ui.controlBorder,
+      mdQuote: t.muted,
+      mdQuoteBorder: ui.accent,
+      mdHr: s.border,
+      mdListBullet: ui.accent,
+      toolDiffAdded: d.success,
+      toolDiffRemoved: d.error,
+      toolDiffContext: t.muted,
+      syntaxComment: x.comment,
+      syntaxKeyword: x.keyword,
+      syntaxFunction: x.function,
+      syntaxVariable: x.variable,
+      syntaxString: x.string,
+      syntaxNumber: x.number,
+      syntaxType: x.type,
+      syntaxOperator: x.operator,
+      syntaxPunctuation: t.muted,
+      thinkingOff: ui.controlBorder,
+      thinkingMinimal: t.subtle,
+      thinkingLow: d.hint,
+      thinkingMedium: d.info,
+      thinkingHigh: x.function,
+      thinkingXhigh: ui.accent,
+      thinkingMax: d.warn,
+      bashMode: x.builtin,
+    },
+    export: { pageBg: s.bg, cardBg: s.panel, infoBg: s.muted },
+  }, null, 2) + '\n';
+}
 for (const variant of ['dark', 'light']) {
   const p = palette[variant];
   for (const section of ['surface', 'text', 'syntax', 'diagnostic', 'ui']) {
@@ -74,6 +145,7 @@ const outputs = {
   'site/src/lib/palette.json': JSON.stringify(palette, null, 2) + '\n',
 };
 for (const variant of ['dark', 'light']) {
+  outputs[`pi/themes/zirconium-${variant}.json`] = piTheme(palette[variant], variant);
   for (const [app, extension, render] of [['alacritty', 'toml', alacritty], ['foot', 'ini', foot], ['kitty', 'conf', kitty]]) {
     outputs[`terminal/${app}/zirconium-${variant}.${extension}`] = render(palette[variant], variant);
   }

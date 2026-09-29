@@ -1,6 +1,6 @@
 # Zirconium
 
-Dark and light palettes for Neovim, Alacritty, foot and kitty. [View the colors](https://t-450.github.io/zirconium/).
+Dark and light palettes for Neovim, Alacritty, foot, kitty and Pi. [View the colors](https://t-450.github.io/zirconium/).
 
 ## Install
 
@@ -24,11 +24,14 @@ Dark and light palettes for Neovim, Alacritty, foot and kitty. [View the colors]
 git clone https://github.com/T-450/zirconium.git ~/.local/share/zirconium
 ```
 
+**Pi / LazyPi** - [install the themes and UI components](pi/README.md).
+
 ## Check
 
 ```sh
 node scripts/generate.mjs --check
 node scripts/check-palette.mjs
+node --test tests/pi-theme.mjs
 npm ci --prefix site
 npm run build --prefix site
 npm run test:prefix --prefix site
